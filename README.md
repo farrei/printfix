@@ -1,28 +1,24 @@
-# 🛠️ PrintFix
+# PrintFix
 
-![CI](https://github.com/rafaelverissimo/printfix/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/farrei/printfix/actions/workflows/ci.yml/badge.svg)](https://github.com/farrei/printfix/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-> **Do print do erro ao chamado pronto em segundos.** Envie a captura de tela de um erro (Windows, impressora, Outlook...) e a IA devolve um chamado de helpdesk completo, em português.
+Cole o print de um erro (Windows, impressora, Outlook) e receba um chamado de helpdesk pronto, em português.
 
-## 🎯 O problema
-No suporte de TI, boa parte do tempo vai para entender **o que** o usuário está vendo. Chega um "deu erro aqui" com um print e o técnico precisa interpretar, pesquisar e documentar. O PrintFix automatiza essa primeira análise (N1):
+## Por que fiz isso
+Trabalhando com suporte, percebi que a maior parte do tempo do primeiro atendimento vai em entender o que o usuário está vendo. Chega um "deu erro aqui" com um print, e alguém precisa interpretar, pesquisar e registrar. O PrintFix faz essa primeira leitura: manda o print para um modelo com visão, identifica o erro e a causa provável e devolve um chamado com título, categoria, prioridade, diagnóstico, passos de solução e quando escalar.
 
-- 📸 lê o print com um modelo de IA com visão;
-- 🧠 identifica o erro e a causa provável;
-- 🎫 gera um chamado padronizado: **título, categoria, prioridade, diagnóstico, passos e quando escalar**.
-
-## ⚙️ Como funciona
+## Como funciona
 ```mermaid
 flowchart LR
-    U[👤 Usuário] -->|print + contexto| UI[Streamlit app.py]
+    U[Usuário] -->|print + contexto| UI[Streamlit app.py]
     UI --> C{API key configurada?}
     C -- não --> D[Modo demo<br/>printfix/demo.py]
     C -- sim --> P[Prompt de sistema<br/>printfix/prompt.py]
     P --> API[API de visão compatível<br/>com OpenAI]
     API -->|JSON| V[Validação Pydantic<br/>printfix/ticket.py]
     D --> V
-    V --> T[🎫 Chamado em Markdown + JSON]
+    V --> T[Chamado em Markdown + JSON]
 ```
 
 | Módulo | Responsabilidade |
@@ -33,40 +29,40 @@ flowchart LR
 | `printfix/demo.py` | Respostas de exemplo para rodar sem chave |
 | `app.py` | Interface web |
 
-## 🚀 Como rodar
+## Rodando
 ```bash
-git clone https://github.com/<seu-usuario>/printfix.git && cd printfix
+git clone https://github.com/farrei/printfix.git && cd printfix
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env        # opcional: preencha OPENAI_API_KEY
 streamlit run app.py
 ```
-Sem chave, o app abre em **modo demo** com exemplos prontos (impressora offline, Outlook pedindo senha, tela azul).
+Sem chave de API o app abre em modo demo, com três casos prontos: impressora offline, Outlook pedindo senha e tela azul. Para usar um modelo de verdade, copie `.env.example` para `.env` e preencha `OPENAI_API_KEY`.
 
-### Configuração
 | Variável | Padrão | Descrição |
 |---|---|---|
 | `OPENAI_API_KEY` | vazio | Chave da API. Vazio = modo demo |
-| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | Qualquer provedor compatível com OpenAI |
-| `PRINTFIX_MODEL` | `gpt-4o-mini` | Modelo com suporte a imagens |
+| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | Qualquer provedor compatível com a API da OpenAI |
+| `PRINTFIX_MODEL` | `gpt-4o-mini` | Modelo com suporte a imagem |
 
-### Testes
+## Stack
+Python, Streamlit, Pydantic e API compatível com OpenAI (visão). Testes com pytest e CI no GitHub Actions (Python 3.10 a 3.12).
+
+## Testes
 ```bash
 pytest -q
 ```
-Os testes usam um cliente falso, então não precisam de chave nem internet. O CI roda no GitHub Actions (Python 3.10–3.12).
+São 12 testes, todos passando. Eles usam um cliente falso, então rodam sem chave e sem internet.
 
-## 🗺️ Roadmap
-- [ ] Integração com GLPI / Jira Service Management para abrir o chamado direto
-- [ ] Base de conhecimento local (RAG) com soluções já usadas pela equipe
-- [ ] OCR offline como fallback
-- [ ] Histórico de chamados e métricas de tipos de erro
-- [ ] Extensão de navegador / atalho para capturar a tela direto
+## Próximos passos
+- Abrir o chamado direto no GLPI ou Jira Service Management
+- Base de conhecimento local com soluções já usadas pela equipe
+- OCR offline como alternativa
+- Histórico de chamados e métricas por tipo de erro
 
-## 🇺🇸 English summary
-**PrintFix** turns a screenshot of an IT error into a ready-to-file helpdesk ticket (title, category, priority, diagnosis, fix steps, escalation criteria) in Brazilian Portuguese, using any OpenAI-compatible vision model. Built with Python, Streamlit and Pydantic; includes a no-key demo mode, unit tests and CI.
+## English
+PrintFix turns a screenshot of an IT error into a ready-to-file helpdesk ticket (title, category, priority, diagnosis, fix steps, escalation criteria) in Brazilian Portuguese, using any OpenAI-compatible vision model. Python, Streamlit, Pydantic; demo mode without an API key, 12 tests, CI.
 
-## 👤 Autor
-**Rafael Verissimo** — São Paulo, SP · Estudante de Análise e Desenvolvimento de Sistemas · Suporte Técnico de TI
+## Autor
+Rafael Verissimo, São Paulo. Estudante de Análise e Desenvolvimento de Sistemas (UNINTER), com experiência em suporte de TI. [github.com/farrei](https://github.com/farrei)
 
 Licença [MIT](LICENSE).
