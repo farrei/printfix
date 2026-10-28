@@ -1,9 +1,30 @@
+<div align="center">
+
 # PrintFix
 
-[![CI](https://github.com/farrei/printfix/actions/workflows/ci.yml/badge.svg)](https://github.com/farrei/printfix/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.10%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+**Cole o print do erro. Receba o chamado de helpdesk pronto.**
 
-Cole o print de um erro (Windows, impressora, Outlook) e receba um chamado de helpdesk pronto, em português.
+Diagnóstico, causa provável, passo a passo e quando escalar, em português.
+
+[![CI](https://github.com/farrei/printfix/actions/workflows/ci.yml/badge.svg)](https://github.com/farrei/printfix/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-app-FF4B4B?logo=streamlit&logoColor=white)
+![Testes](https://img.shields.io/badge/testes-12%20passando-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+<img src="docs/demo.png" alt="PrintFix em modo demo gerando um chamado de impressora offline" width="640">
+
+</div>
+
+## O problema
+Um "deu erro aqui" com um print anexado. Quem está no primeiro atendimento precisa interpretar a tela, pesquisar e registrar o chamado, e isso se repete o dia inteiro.
+
+## O que o PrintFix faz
+- Lê o print com um modelo de visão e identifica o erro
+- Devolve título, categoria, prioridade e diagnóstico
+- Lista os passos de solução e o critério para escalar para N2/Infra
+- Exporta o chamado em Markdown e JSON
+- Roda em **modo demo sem chave de API**, pronto para testar
 
 ## Por que fiz isso
 Trabalhando com suporte, percebi que a maior parte do tempo do primeiro atendimento vai em entender o que o usuário está vendo. Chega um "deu erro aqui" com um print, e alguém precisa interpretar, pesquisar e registrar. O PrintFix faz essa primeira leitura: manda o print para um modelo com visão, identifica o erro e a causa provável e devolve um chamado com título, categoria, prioridade, diagnóstico, passos de solução e quando escalar.
