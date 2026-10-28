@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrintFix · print de erro vira chamado de helpdesk</title>
+<meta name="description" content="Cole o print do erro e receba o chamado de helpdesk pronto, com diagnóstico e passo a passo.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" href="#"><span class="logo-mark">PF</span> PrintFix</a>
+    <nav><a href="#demo">Demo</a><a href="#como">Como funciona</a><a href="#stack">Stack</a><a href="#rodar">Rodar</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-in">
+    <p class="kicker">IA aplicada a suporte de TI</p>
+    <h1>PrintFix</h1>
+    <p class="tagline">Cole o print do erro e receba o chamado de helpdesk pronto, com diagnóstico e passo a passo.</p>
+    <p class="sub">O usuário manda uma captura de tela, um modelo de visão lê o erro e o PrintFix devolve um chamado estruturado: categoria, prioridade, causa provável, o que fazer e quando escalar.</p>
+    <div class="cta">
+      <a class="btn primary" href="#demo">Testar a demo</a>
+      <a class="btn ghost" href="https://github.com/farrei/printfix">Ver código no GitHub</a>
+    </div>
+    <ul class="facts"><li><b>12</b> testes automatizados</li><li><b>3</b> erros de exemplo</li><li><b>0</b> chave de API para testar</li></ul>
+  </div>
+</section>
+
+<section id="demo" class="section">
+  <div class="wrap">
+    <h2>Demo</h2>
+    <p class="lead">Escolha um dos erros de exemplo ou arraste um print seu. Os chamados abaixo são os mesmos do modo demo do app.</p>
+    <div class="app">
+      <div class="app-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="app-title">Central de Atendimento · Novo chamado</span></div>
+      <div class="app-body">
+        <div class="pane">
+          <p class="label">1. Print do erro</p>
+          <div class="shots" id="shots">
+            <button class="shot active" data-k="Impressora offline">
+              <div class="sc sc-printer">
+                <div class="win-bar">Impressoras e scanners</div>
+                <div class="pr-row"><svg viewBox="0 0 40 32" width="34"><rect x="8" y="2" width="24" height="9" fill="#cfd8e3"/><rect x="2" y="10" width="36" height="14" rx="3" fill="#8a99ad"/><rect x="9" y="20" width="22" height="10" fill="#fff"/></svg>
+                <div><b>HP LaserJet RH-02</b><span class="off">● Offline</span></div></div>
+                <div class="toast">Não foi possível imprimir o documento.</div>
+              </div>
+              <span class="cap">Impressora offline</span>
+            </button>
+            <button class="shot" data-k="Outlook pedindo senha">
+              <div class="sc sc-outlook">
+                <div class="ol-head">Microsoft Outlook</div>
+                <div class="ol-box"><b>Digite a senha</b><span>rafael@empresa.com.br</span><i></i><em>OK</em></div>
+              </div>
+              <span class="cap">Outlook pedindo senha</span>
+            </button>
+            <button class="shot" data-k="Tela azul (BSOD)">
+              <div class="sc sc-bsod">
+                <div class="face">:(</div>
+                <p>Seu PC encontrou um problema e precisa ser reiniciado.</p>
+                <small>Código de parada: IRQL_NOT_LESS_OR_EQUAL</small>
+              </div>
+              <span class="cap">Tela azul (BSOD)</span>
+            </button>
+          </div>
+          <label class="drop" id="drop">
+            <input type="file" accept="image/*" id="file" hidden>
+            <span id="dropText"><b>Arraste um print aqui</b> ou clique para escolher</span>
+            <img id="preview" alt="" hidden>
+          </label>
+          <p class="note" id="note" hidden></p>
+          <button class="btn primary wide" id="go">Analisar</button>
+          <p class="hint"><b>No app em Python</b>, o print vai para um modelo de visão e a resposta é validada antes de virar chamado. Aqui no site, os três exemplos usam as mesmas respostas do modo demo.</p>
+        </div>
+        <div class="pane out" id="out">
+          <p class="label">2. Chamado gerado</p>
+          <div class="empty" id="empty">O chamado aparece aqui depois da análise.</div>
+          <div class="loading" id="loading" hidden><div class="scan"></div><p id="loadMsg">Lendo o print...</p></div>
+          <article class="ticket" id="ticket" hidden></article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="como" class="section alt">
+  <div class="wrap">
+    <h2>Como funciona</h2>
+    <div class="grid3">
+      <div class="card"><span class="n">1</span><h3>Print</h3><p>O usuário cola ou envia a captura de tela do erro, do jeito que ela estiver.</p></div>
+      <div class="card"><span class="n">2</span><h3>Análise</h3><p>Um LLM com visão lê a tela e responde em JSON. O Pydantic valida e normaliza a categoria e a prioridade.</p></div>
+      <div class="card"><span class="n">3</span><h3>Chamado</h3><p>Sai um chamado pronto para o técnico: diagnóstico, passos numerados e o critério para escalar. Exporta em Markdown.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>O app de verdade</h2>
+    <p class="lead">A análise com IA roda no app em Python (Streamlit). Esta é a tela do modo demo.</p>
+    <figure class="real"><img src="docs/demo.png" alt="Tela do PrintFix rodando no Streamlit"></figure>
+  </div>
+</section>
+
+<section id="stack" class="section alt">
+  <div class="wrap two">
+    <div>
+      <h2>Stack</h2>
+      <ul class="chips"><li>Python 3.10+</li><li>Streamlit</li><li>Pydantic</li><li>LLM com visão</li><li>pytest</li><li>GitHub Actions</li><li>HTML/CSS/JS</li></ul>
+    </div>
+    <div>
+      <h2>12 testes automatizados</h2>
+      <p>Cobrem o modelo do chamado, a leitura do JSON do modelo, o modo demo e a exportação em Markdown. Rodam a cada push no GitHub Actions.</p>
+      <a href="https://github.com/farrei/printfix/actions/workflows/ci.yml"><img src="https://github.com/farrei/printfix/actions/workflows/ci.yml/badge.svg" alt="CI" height="20"></a>
+    </div>
+  </div>
+</section>
+
+<section id="rodar" class="section">
+  <div class="wrap">
+    <h2>Rodar localmente</h2>
+    <pre class="code"><code>git clone https://github.com/farrei/printfix.git
+cd printfix
+pip install -r requirements.txt
+streamlit run app.py      # abre em modo demo, sem chave de API
+pytest                    # 12 testes</code></pre>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span>Feito por Rafael Verissimo · São Paulo</span>
+    <span><a href="https://github.com/farrei">GitHub</a> · <a href="https://www.linkedin.com/in/faelverissimo">LinkedIn</a></span>
+  </div>
+</footer>
+<script src="assets/samples.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
